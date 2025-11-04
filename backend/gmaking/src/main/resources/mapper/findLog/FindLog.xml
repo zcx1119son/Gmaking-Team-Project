@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.gmaking.pve.dao.PveBattleDAO">
+    <!-- 캐릭터별 배틀 로그 조회 -->
+    <select id="selectBattleLogsByCharacterId"
+            parameterType="int"
+            resultType="com.project.gmaking.pve.vo.BattleLogVO">
+        SELECT
+        b.BATTLE_ID       AS battleId,
+        b.CHARACTER_ID    AS characterId,
+        b.BATTLE_TYPE     AS battleType,
+        b.OPPONENT_ID     AS opponentId,
+        b.IS_WIN          AS isWin,
+        b.TURN_COUNT      AS turnCount,
+        b.CREATED_DATE    AS createdDate,
+        b.CREATED_BY      AS createdBy,
+        b.UPDATED_DATE    AS updatedDate,
+        b.UPDATED_BY      AS updatedBy,
+        COALESCE(c.CHARACTER_NAME, '삭제된 캐릭터') AS characterName,
+        CASE
+        WHEN b.BATTLE_TYPE = 'PVP' THEN COALESCE(oc.CHARACTER_NAME, '삭제된 캐릭터')
+        WHEN b.BATTLE_TYPE = 'PVE' THEN COALESCE(m.MONSTER_NAME, '삭제된 몬스터')
+        ELSE '알 수 없음'
+        END AS opponentName
+
+        FROM TB_BATTLE_LOG b
+        LEFT JOIN TB_CHARACTER c  ON b.CHARACTER_ID = c.CHARACTER_ID
+        LEFT JOIN TB_CHARACTER oc ON b.OPPONENT_ID = oc.CHARACTER_ID
+        LEFT JOIN TB_MONSTER m    ON b.OPPONENT_ID = m.MONSTER_ID
+
+        WHERE b.CHARACTER_ID = #{characterId}
+        OR b.OPPONENT_ID = #{characterId}
+
+        ORDER BY b.CREATED_DATE DESC
+    </select>
+</mapper>

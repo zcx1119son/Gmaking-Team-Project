@@ -1,0 +1,80 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.6'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.2thproject'
+version = '0.0.1-SNAPSHOT'
+description = 'AI 활용 체험 게임 플랫폼: 겜만중'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    // mybatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // MyBatis 및 jdbc 설정
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    // JJWT
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // JJWT 0.9.1 호환을 위해 JAXB API 추가
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.3'
+
+    // 이메일 발송 기능
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // 구글 채팅 기능
+    implementation 'com.google.genai:google-genai:1.22.0'
+
+    // Spring Security OAuth 2.0 Client
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // Google Cloud Storage Client
+    implementation 'com.google.cloud:google-cloud-storage:2.35.0'
+
+    // LangChain4j + OpenAI
+    implementation 'dev.langchain4j:langchain4j:0.34.0'
+    implementation 'dev.langchain4j:langchain4j-spring-boot-starter:0.34.0'
+    implementation 'dev.langchain4j:langchain4j-open-ai:0.34.0'
+
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.gmaking.character.dao.CharacterDAO">
+
+
+    <resultMap id="CharacterWithStatMap" type="com.project.gmaking.character.vo.CharacterVO">
+        <id property="characterId" column="CHARACTER_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="characterName" column="CHARACTER_NAME"/>
+        <result property="imageId" column="IMAGE_ID"/>
+        <result property="imageUrl" column="IMAGE_URL"/>
+        <result property="characterPersonalityId" column="CHARACTER_PERSONALITY_ID"/>
+        <result property="backgroundInfo" column="BACKGROUND_INFO"/>
+        <result property="gradeId" column="GRADE_ID"/>
+        <result property="totalStageClears" column="TOTAL_STAGE_CLEARS"/>
+        <result property="evolutionStep" column="EVOLUTION_STEP"/>
+
+        <association property="characterStat" javaType="com.project.gmaking.character.vo.CharacterStatVO">
+            <id property="characterId" column="CHARACTER_ID"/>
+            <result property="characterHp" column="CHARACTER_HP"/>
+            <result property="characterAttack" column="CHARACTER_ATTACK"/>
+            <result property="characterDefense" column="CHARACTER_DEFENSE"/>
+            <result property="characterSpeed" column="CHARACTER_SPEED"/>
+            <result property="criticalRate" column="CRITICAL_RATE"/>
+        </association>
+    </resultMap>
+
+<!--   특정 캐릭터 하나 조회-->
+    <select id="selectCharacterById" parameterType="int" resultMap="CharacterWithStatMap">
+        SELECT
+        c.CHARACTER_ID,
+        c.USER_ID,
+        c.CHARACTER_NAME,
+        c.IMAGE_ID,
+        i.IMAGE_URL,
+        c.CHARACTER_PERSONALITY_ID,
+        c.BACKGROUND_INFO,
+        c.GRADE_ID,
+        c.TOTAL_STAGE_CLEARS,
+        c.EVOLUTION_STEP,
+        s.CHARACTER_HP,
+        s.CHARACTER_ATTACK,
+        s.CHARACTER_DEFENSE,
+        s.CHARACTER_SPEED,
+        s.CRITICAL_RATE
+        FROM TB_CHARACTER c
+        LEFT JOIN TB_CHARACTER_STAT s ON c.CHARACTER_ID = s.CHARACTER_ID
+        LEFT JOIN TB_IMAGE i ON c.IMAGE_ID = i.IMAGE_ID
+        WHERE c.CHARACTER_ID = #{characterId}
+    </select>
+
+<!--    유저가 가진 캐릭터 전부 조회-->
+    <select id="selectCharactersByUser" parameterType="string" resultMap="CharacterWithStatMap">
+        SELECT
+        c.CHARACTER_ID,
+        c.USER_ID,
+        c.CHARACTER_NAME,
+        c.IMAGE_ID,
+        i.IMAGE_URL,
+        c.CHARACTER_PERSONALITY_ID,
+        c.BACKGROUND_INFO,
+        c.GRADE_ID,
+        c.TOTAL_STAGE_CLEARS,
+        c.EVOLUTION_STEP,
+        s.CHARACTER_HP,
+        s.CHARACTER_ATTACK,
+        s.CHARACTER_DEFENSE,
+        s.CHARACTER_SPEED,
+        s.CRITICAL_RATE
+        FROM TB_CHARACTER c
+        LEFT JOIN TB_CHARACTER_STAT s ON c.CHARACTER_ID = s.CHARACTER_ID
+        LEFT JOIN TB_IMAGE i ON c.IMAGE_ID = i.IMAGE_ID
+        WHERE c.USER_ID = #{userId}
+    </select>
+
+    <update id="incrementStageClear">
+        UPDATE TB_CHARACTER
+        SET TOTAL_STAGE_CLEARS = TOTAL_STAGE_CLEARS + 1,
+        UPDATED_DATE = NOW()
+        WHERE CHARACTER_ID = #{characterId}
+    </update>
+
+    <!-- 캐릭터 단건 조회
+    <select id="selectCharacterById"
+            resultType="com.project.gmaking.character.vo.CharacterVO">
+        SELECT
+            CHARACTER_ID              AS characterId,
+            USER_ID                   AS userId,
+            IMAGE_ID                  AS imageId,
+            CHARACTER_PERSONALITY_ID  AS characterPersonalityId,
+            CHARACTER_NAME            AS characterName,
+            BACKGROUND_INFO           AS backgroundInfo,
+            GRADE_ID                  AS gradeId,
+            TOTAL_STAGE_CLEARS        AS totalStageClears,
+            EVOLUTION_STEP            AS evolutionStep,
+            CREATED_DATE              AS createdDate,
+            CREATED_BY                AS createdBy,
+            UPDATED_DATE              AS updatedDate,
+            UPDATED_BY                AS updatedBy
+        FROM TB_CHARACTER
+        WHERE CHARACTER_ID = #{characterId}
+        LIMIT 1
+    </select> -->
+
+    <!--  캐릭터 personality 단건 조회  -->
+    <select id="selectPersonalityById"
+            resultType="com.project.gmaking.character.vo.CharacterPersonalityVO">
+        SELECT
+        CHARACTER_PERSONALITY_ID AS characterPersonalityId,
+        PERSONALITY_DESCRIPTION  AS personalityDescription,
+        CREATED_DATE             AS createdDate,
+        CREATED_BY               AS createdBy,
+        UPDATED_DATE             AS updatedDate,
+        UPDATED_BY               AS updatedBy
+        FROM TB_CHARACTER_PERSONALITY
+        WHERE CHARACTER_PERSONALITY_ID = #{personalityId}
+        LIMIT 1
+    </select>
+
+    <!--  캐릭터 목록 조회  -->
+    <select id="selectCharactersForChat" parameterType="string" resultType="map">
+        SELECT
+            c.CHARACTER_ID   AS id,
+            c.CHARACTER_NAME AS name,
+            i.IMAGE_URL      AS imageUrl
+        FROM TB_CHARACTER c
+        LEFT JOIN TB_IMAGE i ON c.IMAGE_ID = i.IMAGE_ID
+        WHERE c.USER_ID = #{userId}
+        ORDER BY c.UPDATED_DATE DESC
+    </select>
+
+    <insert id="insertImage" parameterType="com.project.gmaking.character.vo.ImageVO"
+            useGeneratedKeys="true"
+            keyProperty="imageId">
+        INSERT INTO tb_image (
+            image_original_name,
+            image_url,
+            image_name,
+            image_type,
+            created_by
+        )
+        VALUES (
+                   #{imageOriginalName},
+                   #{imageUrl},
+                   #{imageName},
+                   #{imageType},
+                   #{createdBy}
+               )
+    </insert>
+
+    <insert id="insertCharacter" parameterType="com.project.gmaking.character.vo.CharacterVO"
+            useGeneratedKeys="true"
+            keyProperty="characterId"
+            keyColumn="CHARACTER_ID">
+        INSERT INTO tb_character (
+        user_id,
+        character_name,
+        image_id,
+        grade_id,
+        character_personality_id,
+        background_info,
+        evolution_step,
+        total_stage_clears,
+        created_by
+        )
+        VALUES (
+        #{userId},
+        #{characterName},
+        #{imageId},
+        1,
+        #{characterPersonalityId},
+        #{backgroundInfo},
+        1,
+        0,
+        #{createdBy}
+        )
+    </insert>
+
+    <!-- grade_id 업데이트 쿼리 -->
+    <update id="updateGradeId">
+        UPDATE tb_character
+        SET grade_id = #{gradeId},
+        updated_date = NOW()
+        WHERE character_id = #{characterId}
+    </update>
+
+    <select id="selectGradeIdByCharacterId"
+            parameterType="int"
+            resultType="int">
+        SELECT GRADE_ID
+        FROM TB_CHARACTER
+        WHERE CHARACTER_ID = #{characterId}
+        LIMIT 1
+    </select>
+
+</mapper>

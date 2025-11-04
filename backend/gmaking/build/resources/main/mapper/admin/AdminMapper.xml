@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.gmaking.admin.dao.AdminDAO">
+
+    <resultMap id="LoginVOResultMap" type="com.project.gmaking.login.vo.LoginVO">
+        <id property="userId" column="USER_ID"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="userEmail" column="USER_EMAIL"/>
+        <result property="userNickname" column="USER_NICKNAME"/>
+        <result property="role" column="ROLE"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+
+        <result property="characterName" column="REPR_CHARACTER_NAME"/>
+        <result property="characterCount" column="CHARACTER_COUNT"/>
+        <result property="incubatorCount" column="INCUBATOR_COUNT"/>
+    </resultMap>
+
+    <resultMap id="CharacterVOResultMap" type="com.project.gmaking.admin.vo.CharacterVO">
+        <id property="characterId" column="CHARACTER_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="characterName" column="CHARACTER_NAME"/>
+        <result property="gradeId" column="GRADE_ID"/>
+        <result property="totalStageClears" column="TOTAL_STAGE_CLEARS"/>
+        <result property="evolutionStep" column="EVOLUTION_STEP"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+
+        <result property="imageUrl" column="IMAGE_URL"/>
+        <result property="userNickname" column="USER_NICKNAME"/>
+    </resultMap>
+
+    <resultMap id="PurchaseVOResultMap" type="com.project.gmaking.admin.vo.PurchaseVO">
+        <id property="purchaseId" column="PURCHASE_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="productId" column="PRODUCT_ID"/>
+        <result property="quantity" column="QUANTITY"/>
+        <result property="amountPaid" column="AMOUNT_PAID"/>
+        <result property="method" column="METHOD"/>
+        <result property="merchantUid" column="MERCHANT_UID"/>
+        <result property="status" column="STATUS"/>
+        <result property="productNameSnap" column="PRODUCT_NAME_SNAP"/>
+        <result property="totalPriceSnap" column="TOTAL_PRICE_SNAP"/>
+        <result property="approvedAt" column="APPROVED_AT"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+
+        <result property="userNickname" column="USER_NICKNAME"/>
+    </resultMap>
+
+    <resultMap id="InventoryVOResultMap" type="com.project.gmaking.admin.vo.InventoryVO">
+        <id property="inventoryId" column="INVENTORY_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="productId" column="PRODUCT_ID"/>
+        <result property="quantity" column="QUANTITY"/>
+        <result property="expiryDate" column="EXPIRY_DATE"/>
+        <result property="acquiredDate" column="ACQUIRED_DATE"/>
+
+        <result property="userNickname" column="USER_NICKNAME"/>
+    </resultMap>
+
+    <resultMap id="ProductVOResultMap" type="com.project.gmaking.admin.vo.ProductVO">
+        <id property="productId" column="PRODUCT_ID"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+        <result property="productType" column="PRODUCT_TYPE"/>
+        <result property="price" column="PRICE"/>
+        <result property="currencyType" column="CURRENCY_TYPE"/>
+        <result property="isSale" column="IS_SALE"/>
+        <result property="durationDays" column="DURATION_DAYS"/>
+        <result property="packSize" column="PACK_SIZE"/>
+        <result property="grantProductId" column="GRANT_PRODUCT_ID"/>
+        <result property="salePrice" column="SALE_PRICE"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="updatedDate" column="UPDATED_DATE"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+    </resultMap>
+
+    <resultMap id="CommunityPostVOResultMap" type="com.project.gmaking.admin.vo.CommunityPostVO">
+        <id property="postId" column="POST_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="viewCount" column="VIEW_COUNT"/>
+        <result property="likeCount" column="LIKE_COUNT"/>
+        <result property="isDeleted" column="IS_DELETED"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="updatedDate" column="UPDATED_DATE"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+
+        <result property="userNickname" column="USER_NICKNAME"/>
+        <result property="commentCount" column="COMMENT_COUNT"/>
+    </resultMap>
+
+    <resultMap id="ReportVOResultMap" type="com.project.gmaking.admin.vo.ReportVO">
+        <id property="reportId" column="REPORT_ID"/>
+        <result property="targetType" column="TARGET_TYPE"/>
+        <result property="targetId" column="TARGET_ID"/>
+        <result property="reporterId" column="REPORTER_ID"/>
+        <result property="reasonCode" column="REASON_CODE"/>
+        <result property="reasonDetail" column="REASON_DETAIL"/>
+        <result property="status" column="STATUS"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+        <result property="updatedDate" column="UPDATED_DATE"/>
+
+        <result property="targetUserId" column="TARGET_USER_ID"/>
+        <result property="reporterNickname" column="REPORTER_NICKNAME"/>
+        <result property="processorNickname" column="PROCESSOR_NICKNAME"/>
+        <result property="navigationId" column="NAVIGATION_ID"/>
+    </resultMap>
+
+    <resultMap id="MonsterVOResultMap" type="com.project.gmaking.admin.vo.MonsterVO">
+        <id property="monsterId" column="MONSTER_ID"/>
+        <result property="imageId" column="IMAGE_ID"/>
+        <result property="monsterName" column="MONSTER_NAME"/>
+        <result property="monsterType" column="MONSTER_TYPE"/>
+        <result property="monsterHp" column="MONSTER_HP"/>
+        <result property="monsterAttack" column="MONSTER_ATTACK"/>
+        <result property="monsterDefense" column="MONSTER_DEFENSE"/>
+        <result property="monsterSpeed" column="MONSTER_SPEED"/>
+        <result property="monsterCriticalRate" column="MONSTER_CRITICAL_RATE"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="updatedDate" column="UPDATED_DATE"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+
+        <result property="imageUrl" column="IMAGE_URL"/>
+        <result property="imageOriginalName" column="IMAGE_ORIGINAL_NAME"/>
+        <result property="imageName" column="IMAGE_NAME"/>
+    </resultMap>
+
+    <resultMap id="ImageVOResultMap" type="com.project.gmaking.admin.vo.ImageVO">
+        <id property="imageId" column="IMAGE_ID"/>
+        <result property="imageOriginalName" column="IMAGE_ORIGINAL_NAME"/>
+        <result property="imageUrl" column="IMAGE_URL"/>
+        <result property="imageName" column="IMAGE_NAME"/>
+        <result property="imageType" column="IMAGE_TYPE"/>
+        <result property="createdDate" column="CREATED_DATE"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="updatedDate" column="UPDATED_DATE"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+    </resultMap>
+
+    <!-- .............................................................. -->
+
+    <sql id="userWhereClause">
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (t1.USER_NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                OR t1.USER_EMAIL LIKE CONCAT('%', #{searchKeyword}, '%'))
+            </if>
+            <if test="filterRole != null and filterRole != ''">
+                AND t1.ROLE = #{filterRole}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countAllUsers" resultType="int">
+        SELECT
+            COUNT(t1.USER_ID)
+        FROM
+            tb_user t1
+            <include refid="userWhereClause"/>
+    </select>
+
+    <select id="selectAllUsers" resultMap="LoginVOResultMap">
+        SELECT
+            t1.USER_ID, t1.USER_NAME, t1.USER_EMAIL, t1.USER_NICKNAME, t1.ROLE, t1.CREATED_DATE,
+            t3.CHARACTER_NAME AS REPR_CHARACTER_NAME,
+            COALESCE(t4.CHAR_COUNT, 0) AS CHARACTER_COUNT,
+            COALESCE(t5.INCUBATOR_COUNT, 0) AS INCUBATOR_COUNT
+        FROM
+            tb_user t1
+        LEFT JOIN
+            tb_character t3 ON t1.CHARACTER_ID = t3.CHARACTER_ID
+        LEFT JOIN (
+            SELECT USER_ID, COUNT(*) AS CHAR_COUNT FROM tb_character GROUP BY USER_ID
+            ) t4 ON t1.USER_ID = t4.USER_ID
+        LEFT JOIN (
+            SELECT USER_ID, SUM(QUANTITY) AS INCUBATOR_COUNT
+            FROM tb_user_inventory
+            WHERE PRODUCT_ID = 4
+            GROUP BY USER_ID
+        ) t5 ON t1.USER_ID = t5.USER_ID
+        <include refid="userWhereClause"/>
+        ORDER BY
+        t1.CREATED_DATE DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <!-- .............................................................. -->
+
+    <sql id="characterWhereClause">
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (t1.CHARACTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                OR t3.USER_NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%'))
+            </if>
+            <if test="filterGradeId != null">
+                AND t1.GRADE_ID = #{filterGradeId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countAllCharacters" resultType="int">
+        SELECT
+            COUNT(t1.CHARACTER_ID)
+        FROM
+            tb_character t1
+        LEFT JOIN tb_user t3 ON t1.USER_ID = t3.USER_ID
+        <include refid="characterWhereClause"/>
+    </select>
+
+    <select id="selectAllCharacters" resultMap="CharacterVOResultMap">
+        SELECT
+            t1.CHARACTER_ID, t1.USER_ID, t1.CHARACTER_NAME, t1.GRADE_ID, t1.TOTAL_STAGE_CLEARS,
+            t1.EVOLUTION_STEP, t1.CREATED_DATE, t2.IMAGE_URL, t3.USER_NICKNAME
+        FROM
+            tb_character t1
+            LEFT JOIN tb_image t2 ON t1.IMAGE_ID = t2.IMAGE_ID
+            LEFT JOIN tb_user t3 ON t1.USER_ID = t3.USER_ID
+            <include refid="characterWhereClause"/>
+        ORDER BY
+        t1.CREATED_DATE DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <!-- 캐릭터 삭제 -->
+    <select id="getCharacterImageId" resultType="int">
+        SELECT IMAGE_ID FROM tb_character WHERE CHARACTER_ID = #{characterId}
+    </select>
+
+    <select id="getUserIdByCharacterId" resultType="string">
+        SELECT USER_ID FROM tb_character WHERE CHARACTER_ID = #{characterId}
+    </select>
+
+    <delete id="deleteCharacterStat">
+        DELETE FROM tb_character_stat WHERE CHARACTER_ID = #{characterId}
+    </delete>
+
+    <delete id="deleteCharacter">
+        DELETE FROM tb_character WHERE CHARACTER_ID = #{characterId}
+    </delete>
+
+    <delete id="deleteImage">
+        DELETE FROM tb_image WHERE IMAGE_ID = #{imageId}
+    </delete>
+
+    <update id="resetUserCharacterInfo">
+        UPDATE tb_user
+        SET
+            CHARACTER_ID = NULL,
+            HAS_CHARACTER = 0
+        WHERE
+            USER_ID = #{userId}
+            AND CHARACTER_ID = #{characterId}
+    </update>
+
+    <!-- .............................................................. -->
+
+    <sql id="purchaseWhereClause">
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (t2.USER_NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                OR t1.PRODUCT_NAME_SNAP LIKE CONCAT('%', #{searchKeyword}, '%'))
+            </if>
+            <if test="filterStatus != null and filterStatus != ''">
+                AND t1.STATUS = #{filterStatus}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countAllPurchases" resultType="int">
+        SELECT
+            COUNT(t1.PURCHASE_ID)
+        FROM
+            tb_purchase t1
+        JOIN
+            tb_user t2 ON t1.USER_ID = t2.USER_ID
+            <include refid="purchaseWhereClause"/>
+    </select>
+
+    <select id="selectAllPurchases" resultMap="PurchaseVOResultMap">
+        SELECT
+            t1.PURCHASE_ID, t1.USER_ID, t1.PRODUCT_ID, t1.QUANTITY, t1.AMOUNT_PAID, t1.METHOD,
+            t1.MERCHANT_UID, t1.STATUS, t1.PRODUCT_NAME_SNAP, t1.TOTAL_PRICE_SNAP,
+            t1.APPROVED_AT, t1.CREATED_DATE, t2.USER_NICKNAME
+        FROM
+            tb_purchase t1
+        JOIN
+            tb_user t2 ON t1.USER_ID = t2.USER_ID
+            <include refid="purchaseWhereClause"/>
+        ORDER BY
+        t1.CREATED_DATE DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <!-- .............................................................. -->
+
+    <sql id="inventoryWhereClause">
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND t2.USER_NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+            </if>
+            <if test="filterProductId != null">
+                AND t1.PRODUCT_ID = #{filterProductId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countAllInventory" resultType="int">
+        SELECT
+            COUNT(t1.INVENTORY_ID)
+        FROM
+            tb_user_inventory t1
+        JOIN
+            tb_user t2 ON t1.USER_ID = t2.USER_ID
+            <include refid="inventoryWhereClause"/>
+    </select>
+
+    <select id="selectAllInventory" resultMap="InventoryVOResultMap">
+        SELECT
+            t1.INVENTORY_ID, t1.USER_ID, t1.PRODUCT_ID, t1.QUANTITY, t1.EXPIRY_DATE,
+            t1.ACQUIRED_DATE, t2.USER_NICKNAME
+        FROM
+            tb_user_inventory t1
+        JOIN
+            tb_user t2 ON t1.USER_ID = t2.USER_ID
+            <include refid="inventoryWhereClause"/>
+        ORDER BY
+        t1.ACQUIRED_DATE DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <insert id="giveItemToUser" parameterType="map">
+        INSERT INTO tb_user_inventory (USER_ID, PRODUCT_ID, QUANTITY, ACQUIRED_DATE)
+        VALUES (#{userId}, #{productId}, #{quantity}, NOW())
+        ON DUPLICATE KEY UPDATE
+            QUANTITY = QUANTITY + #{quantity},
+            UPDATED_DATE = NOW()
+    </insert>
+
+    <update id="updateUserIncubatorCount" parameterType="map">
+        UPDATE tb_user
+        SET
+            INCUBATOR_COUNT = INCUBATOR_COUNT + #{quantity}
+        WHERE
+            USER_ID = #{userId}
+    </update>
+
+    <!-- .............................................................. -->
+
+    <sql id="productWhereClause">
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND t1.PRODUCT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+            </if>
+            <if test="filterIsSale != null and filterIsSale != ''">
+                AND t1.IS_SALE = #{filterIsSale}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countAllProducts" resultType="int">
+        SELECT
+            COUNT(PRODUCT_ID)
+        FROM
+            tb_product t1
+            <include refid="productWhereClause"/>
+    </select>
+
+    <select id="selectAllProducts" resultMap="ProductVOResultMap">
+        SELECT
+            PRODUCT_ID, PRODUCT_NAME, PRODUCT_TYPE, PRICE, CURRENCY_TYPE, IS_SALE,
+            DURATION_DAYS, PACK_SIZE, GRANT_PRODUCT_ID, SALE_PRICE,
+            CREATED_DATE, CREATED_BY, UPDATED_DATE, UPDATED_BY
+        FROM
+            tb_product t1
+            <include refid="productWhereClause"/>
+        ORDER BY
+        t1.PRODUCT_ID DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <insert id="insertProduct" parameterType="com.project.gmaking.admin.vo.ProductVO">
+        INSERT INTO tb_product (
+            PRODUCT_NAME,
+            PRODUCT_TYPE,
+            PRICE,
+            CURRENCY_TYPE,
+            IS_SALE,
+            CREATED_BY,
+            DURATION_DAYS,
+            pack_size,
+            GRANT_PRODUCT_ID,
+            sale_price
+        ) VALUES (
+            #{productName},
+            #{productType},
+            #{price},
+            #{currencyType},
+            #{isSale},
+            #{createdBy},
+            #{durationDays},
+            #{packSize},
+            #{grantProductId},
+            #{salePrice}
+        )
+    </insert>
+
+    <!-- 상품 수정, 삭제 -->
+    <update id="updateProduct">
+        UPDATE tb_product
+        SET
+            PRODUCT_NAME = #{productName},
+            PRODUCT_TYPE = #{productType},
+            PRICE = #{price},
+            CURRENCY_TYPE = #{currencyType},
+            IS_SALE = #{isSale},
+            DURATION_DAYS = #{durationDays},
+            PACK_SIZE = #{packSize},
+            GRANT_PRODUCT_ID = #{grantProductId},
+            SALE_PRICE = #{salePrice},
+            UPDATED_DATE = NOW(),
+            UPDATED_BY = #{updatedBy} WHERE
+            PRODUCT_ID = #{productId}
+    </update>
+
+    <delete id="deleteProduct">
+        DELETE FROM tb_product WHERE PRODUCT_ID = #{productId}
+    </delete>
+
+    <!-- .............................................................. -->
+
+    <sql id="postWhereClause">
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (
+                    t1.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR t2.USER_NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                )
+            </if>
+            <if test="filterCategory != null and filterCategory != ''">
+                AND t1.CATEGORY_CODE = #{filterCategory}
+            </if>
+            <if test="filterIsDeleted != null and filterIsDeleted != ''">
+                AND t1.IS_DELETED = #{filterIsDeleted}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countAllPosts" resultType="int">
+        SELECT
+            COUNT(t1.POST_ID)
+        FROM
+            tb_community_post t1
+        JOIN
+            tb_user t2 ON t1.USER_ID = t2.USER_ID
+            <include refid="postWhereClause"/>
+    </select>
+
+    <select id="selectAllPosts" resultMap="CommunityPostVOResultMap">
+        SELECT
+            t1.POST_ID, t1.USER_ID, t1.CATEGORY_CODE, t1.TITLE,
+            t1.CONTENT, t1.UPDATED_DATE, t1.UPDATED_BY, t1.VIEW_COUNT,
+            (
+                SELECT COUNT(tl.POST_ID)
+                FROM tb_community_like tl
+                WHERE tl.POST_ID = t1.POST_ID
+            ) AS LIKE_COUNT,
+                t1.IS_DELETED,
+                t1.CREATED_DATE, t1.CREATED_BY,
+                t2.USER_NICKNAME,
+            (
+                SELECT COUNT(c.COMMENT_ID)
+                FROM tb_community_comment c
+                WHERE c.POST_ID = t1.POST_ID AND c.IS_DELETED = 'N'
+            ) AS COMMENT_COUNT
+        FROM
+            tb_community_post t1
+            JOIN
+            tb_user t2 ON t1.USER_ID = t2.USER_ID
+        <include refid="postWhereClause"/>
+        ORDER BY
+        t1.CREATED_DATE DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <update id="deletePost" parameterType="long">
+        UPDATE
+        tb_community_post
+        SET
+            IS_DELETED = 'Y',
+            UPDATED_DATE = NOW(),
+            UPDATED_BY = 'ADMIN'
+        WHERE
+        POST_ID = #{postId}
+        AND IS_DELETED = 'N'
+    </update>
+
+    <!-- .............................................................. -->
+
+    <sql id="reportWhereClause">
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (
+                T2.USER_NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                OR T1.REASON_DETAIL LIKE CONCAT('%', #{searchKeyword}, '%')
+                )
+            </if>
+            <if test="filterStatus != null and filterStatus != ''">
+                AND T1.STATUS = #{filterStatus}
+            </if>
+            <if test="filterType != null and filterType != ''">
+                AND T1.TARGET_TYPE = #{filterType}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countAllReports" resultType="int">
+        SELECT
+            COUNT(T1.REPORT_ID)
+        FROM
+            tb_report T1
+        JOIN
+            tb_user T2 ON T1.REPORTER_ID = T2.USER_ID
+            <include refid="reportWhereClause"/>
+    </select>
+
+    <select id="selectAllReports" resultMap="ReportVOResultMap">
+        SELECT
+            T1.REPORT_ID, T1.TARGET_TYPE, T1.TARGET_ID, T1.REPORTER_ID, T1.REASON_CODE, T1.REASON_DETAIL,
+            T1.STATUS, T1.CREATED_DATE, T1.UPDATED_DATE, T1.CREATED_BY, T1.UPDATED_BY,
+
+            -- 신고 대상의 작성자 ID (USER_ID)
+            CASE T1.TARGET_TYPE
+                WHEN 'POST' THEN Post.USER_ID
+                WHEN 'COMMENT' THEN Comment.USER_ID
+                ELSE NULL
+            END AS TARGET_USER_ID,
+
+            -- 페이지 이동을 위한 최종 POST_ID 또는 TARGET_ID
+            CASE T1.TARGET_TYPE
+                WHEN 'POST' THEN T1.TARGET_ID
+                WHEN 'COMMENT' THEN Comment.POST_ID
+                ELSE NULL
+            END AS NAVIGATION_ID,
+
+            -- 신고자 닉네임 (REPORTER_ID를 사용하여 T2 테이블에서 가져옴)
+            T2.USER_NICKNAME AS REPORTER_NICKNAME,
+
+            -- 처리 관리자 닉네임 (UPDATED_BY를 사용하여 T3 테이블에서 가져옴)
+            T3.USER_NICKNAME AS PROCESSOR_NICKNAME
+            FROM
+                tb_report T1
+
+            -- 신고자 닉네임을 가져오기 위한 조인
+            LEFT JOIN
+                tb_user T2 ON T1.REPORTER_ID = T2.USER_ID
+
+            -- 처리 관리자 닉네임을 가져오기 위한 조인
+            LEFT JOIN
+                tb_user T3 ON T1.UPDATED_BY = T3.USER_ID
+
+            -- 게시글 작성자 ID 조인을 위한 조건부 LEFT JOIN
+            LEFT JOIN
+                tb_community_post Post ON T1.TARGET_TYPE = 'POST' AND T1.TARGET_ID = Post.POST_ID
+
+            -- 댓글 작성자 ID 및 POST_ID를 가져오기 위한 조건부 LEFT JOIN
+            LEFT JOIN
+                tb_community_comment Comment ON T1.TARGET_TYPE = 'COMMENT' AND T1.TARGET_ID = Comment.COMMENT_ID
+
+        <include refid="reportWhereClause"/>
+        ORDER BY
+        T1.CREATED_DATE DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id="selectReportDetail" resultMap="ReportVOResultMap">
+        SELECT
+            T1.REPORT_ID, T1.TARGET_TYPE, T1.TARGET_ID, T1.STATUS
+        FROM
+            tb_report T1
+        WHERE
+            T1.REPORT_ID = #{reportId}
+    </select>
+
+    <update id="updateReportStatus">
+        UPDATE tb_report
+        SET
+            STATUS = #{status},
+            UPDATED_BY = #{updatedBy},
+            UPDATED_DATE = CURRENT_TIMESTAMP()
+        WHERE
+            REPORT_ID = #{reportId}
+            AND STATUS = 'PENDING' </update>
+
+    <update id="deleteComment">
+        UPDATE tb_community_comment
+        SET IS_DELETED = 1
+        WHERE COMMENT_ID = #{commentId}
+    </update>
+
+    <!-- .............................................................. -->
+
+    <sql id="monsterWhereClause">
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                T1.MONSTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+            </if>
+            <if test="filterMonsterType != null and filterMonsterType != ''">
+                AND T1.MONSTER_TYPE = #{filterMonsterType}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insertImage" useGeneratedKeys="true" keyProperty="imageId" keyColumn="IMAGE_ID">
+        INSERT INTO tb_image (
+            IMAGE_ORIGINAL_NAME, IMAGE_URL, IMAGE_NAME, IMAGE_TYPE, CREATED_BY
+        ) VALUES (
+            #{imageOriginalName}, #{imageUrl}, #{imageName}, #{imageType}, #{createdBy}
+        )
+    </insert>
+
+    <update id="updateImage">
+        UPDATE tb_image
+        SET
+            IMAGE_ORIGINAL_NAME = #{imageOriginalName},
+            IMAGE_URL = #{imageUrl},
+            IMAGE_NAME = #{imageName},
+            UPDATED_DATE = CURRENT_TIMESTAMP(),
+            UPDATED_BY = #{updatedBy}
+        WHERE
+            IMAGE_ID = #{imageId}
+    </update>
+
+<!--    <delete id="deleteImage">-->
+<!--        DELETE FROM tb_image WHERE IMAGE_ID = #{imageId}-->
+<!--    </delete>-->
+
+    <select id="countAllMonsters" resultType="int">
+        SELECT
+            COUNT(MONSTER_ID)
+        FROM
+            tb_monster T1
+            <include refid="monsterWhereClause"/>
+    </select>
+
+    <select id="selectAllMonsters" resultMap="MonsterVOResultMap">
+        SELECT
+            T1.MONSTER_ID, T1.MONSTER_NAME, T1.MONSTER_TYPE, T1.MONSTER_HP,
+            T1.MONSTER_ATTACK, T1.MONSTER_DEFENSE, T1.MONSTER_SPEED, T1.MONSTER_CRITICAL_RATE,
+            T2.IMAGE_URL, T2.IMAGE_ORIGINAL_NAME,
+            T1.CREATED_DATE
+        FROM
+            tb_monster T1
+        JOIN
+            tb_image T2 ON T1.IMAGE_ID = T2.IMAGE_ID
+            <include refid="monsterWhereClause"/>
+        ORDER BY T1.MONSTER_ID DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id="selectMonsterDetail" resultMap="MonsterVOResultMap">
+        SELECT
+            T1.*,
+            T2.IMAGE_URL, T2.IMAGE_ORIGINAL_NAME, T2.IMAGE_NAME
+        FROM
+            tb_monster T1
+        JOIN
+            tb_image T2 ON T1.IMAGE_ID = T2.IMAGE_ID
+        WHERE
+            T1.MONSTER_ID = #{monsterId}
+    </select>
+
+    <insert id="insertMonster">
+        INSERT INTO tb_monster (
+            IMAGE_ID, MONSTER_NAME, MONSTER_TYPE, MONSTER_HP, MONSTER_ATTACK,
+            MONSTER_DEFENSE, MONSTER_SPEED, MONSTER_CRITICAL_RATE, CREATED_BY
+        ) VALUES (
+            #{imageId}, #{monsterName}, #{monsterType}, #{monsterHp}, #{monsterAttack},
+            #{monsterDefense}, #{monsterSpeed}, #{monsterCriticalRate}, #{createdBy}
+        )
+    </insert>
+
+    <update id="updateMonster">
+        UPDATE tb_monster
+        SET
+            MONSTER_NAME = #{monsterName},
+            MONSTER_TYPE = #{monsterType},
+            MONSTER_HP = #{monsterHp},
+            MONSTER_ATTACK = #{monsterAttack},
+            MONSTER_DEFENSE = #{monsterDefense},
+            MONSTER_SPEED = #{monsterSpeed},
+            MONSTER_CRITICAL_RATE = #{monsterCriticalRate},
+            UPDATED_DATE = CURRENT_TIMESTAMP(),
+            UPDATED_BY = #{updatedBy}
+        WHERE
+            MONSTER_ID = #{monsterId}
+    </update>
+
+    <select id="selectMonsterImageId" resultType="int">
+        SELECT IMAGE_ID FROM tb_monster WHERE MONSTER_ID = #{monsterId}
+    </select>
+
+    <delete id="deleteMonster">
+        DELETE FROM tb_monster WHERE MONSTER_ID = #{monsterId}
+    </delete>
+
+</mapper>

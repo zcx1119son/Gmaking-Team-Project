@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.gmaking.pve.dao.MonsterDAO">
+
+    <resultMap id="monsterResultMap" type="com.project.gmaking.pve.vo.MonsterVO">
+        <id column="MONSTER_ID" property="monsterId"/>
+        <result column="IMAGE_ID" property="imageId"/>
+        <result column="IMAGE_URL" property="imageUrl"/>
+        <result column="imageOriginalName" property="imageOriginalName"/>
+        <result column="MONSTER_NAME" property="monsterName"/>
+        <result column="MONSTER_TYPE" property="monsterType"/>
+        <result column="MONSTER_HP" property="monsterHp"/>
+        <result column="MONSTER_ATTACK" property="monsterAttack"/>
+        <result column="MONSTER_DEFENSE" property="monsterDefense"/>
+        <result column="MONSTER_SPEED" property="monsterSpeed"/>
+        <result column="MONSTER_CRITICAL_RATE" property="monsterCriticalRate"/>
+        <result column="CREATED_DATE" property="createdDate"/>
+        <result column="CREATED_BY" property="createdBy"/>
+        <result column="UPDATED_DATE" property="updatedDate"/>
+        <result column="UPDATED_BY" property="updatedBy"/>
+    </resultMap>
+
+    <select id="getRandomMonsterByType" resultMap="monsterResultMap">
+        SELECT
+        m.MONSTER_ID,
+        m.IMAGE_ID,
+        i.IMAGE_URL AS IMAGE_URL,
+        i.IMAGE_ORIGINAL_NAME AS imageOriginalName,
+        m.MONSTER_NAME,
+        m.MONSTER_TYPE,
+        m.MONSTER_HP,
+        m.MONSTER_ATTACK,
+        m.MONSTER_DEFENSE,
+        m.MONSTER_SPEED,
+        m.MONSTER_CRITICAL_RATE,
+        m.CREATED_DATE,
+        m.CREATED_BY,
+        m.UPDATED_DATE,
+        m.UPDATED_BY
+        FROM TB_MONSTER m
+        LEFT JOIN TB_IMAGE i ON m.IMAGE_ID = i.IMAGE_ID
+        WHERE m.MONSTER_TYPE = #{type}
+        ORDER BY RAND() LIMIT 1
+    </select>
+
+</mapper>

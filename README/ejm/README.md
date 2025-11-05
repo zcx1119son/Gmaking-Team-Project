@@ -141,10 +141,36 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
         raise HTTPException(status_code=500, detail=f"Horde API submission failed: {response.text}")
     return response.json().get("id")
 ```
+
+***
+
 > **핵심 선택 근거**  
 > - `steps=28`, `denoising_strength=0.54`: **생성 시간 8.2초 달성**  
 > - `Anything Diffusion`: 2D/애니메 스타일에 안정적  
 > - `cfg_scale=12`: 프롬프트 충실도 유지
+
+***
+
+### 4-2. 성장 단계별 프롬프트 템플릿
+
+```MODIFICATIONS = {
+    "EVO_KEY_STAGE1": {
+        "base_prompt": (
+            "A pixel-art fantasy RPG style character, keeping the same creature's **species**, "
+            "**color palette**, and overall **face structure** from the input image. "
+            "The character is now equipped with **basic, functional armor** and a **simple, functional weapon**. "
+            "The **pose** is that of a newly established warrior, confident and ready for adventure. "
+            "Centered composition, 1024x1024, with a **clean white background**."
+        ),
+        "negative_prompt": (
+            "different creature, new design, photorealistic, extra limbs, human-like form, blurry, "
+            "multiple characters, text, watermark, colored background, change in species or face, "
+            "oversized weapon, overly ornate"
+        )
+    }
+    # STAGE2, STAGE3, EVO_KEY_FINAL 동일 구조
+}
+```
 
 ***
 

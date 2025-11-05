@@ -200,8 +200,7 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
     J --> K[tb_character_stat: 최종 스탯]
     J --> L[tb_character: 단계 + 이미지ID]
     J --> M[tb_growth: 증가분 기록]
-    K & L & M --> N[성공 응답 + 전후 비교 UI]
-
+    K & L & M --> N[성공 응답 + 전후 비교 UI];
 ```
 
 ***

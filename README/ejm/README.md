@@ -6,6 +6,25 @@
 
 ***
 
+## 💻 핵심 기여 소스 코드 (Core Contribution)
+
+이 프로젝트에서 **엄정민 님이 주도적으로 설계 및 구현**한 핵심 기능별 소스 코드와 자원 폴더 목록입니다.
+
+| 기능 분류 | 프론트엔드 (Frontend) | 백엔드 (Backend) | AI 서버/자원 |
+| :--- | :--- | :--- | :--- |
+| **AI 성장 시스템** | [성장 컴포넌트](https://github.com/zcx1119son/Gmaking-Team-Project/tree/master/frontend/src/components/growth) | [성장 서비스 로직](https://github.com/zcx1119son/Gmaking-Team-Project/tree/master/backend/gmaking/src/main/java/com/project/gmaking/growth) | [FastAPI AI 서버](https://github.com/zcx1119son/Gmaking-Team-Project/tree/master/growth_ai_server) |
+| | | [성장 Mapper 자원](https://github.com/zcx1119son/Gmaking-Team-Project/tree/master/backend/gmaking/src/main/resources/mapper/growth) | |
+| **통합 커뮤니티** | [커뮤니티 페이지](https://github.com/zcx1119son/Gmaking-Team-Project/tree/master/frontend/src/pages/community) | [커뮤니티 서비스 로직](https://github.com/zcx1119son/Gmaking-Team-Project/tree/master/backend/gmaking/src/main/java/com/project/gmaking/community) | |
+| | | [커뮤니티 Mapper 자원](https://github.com/zcx1119son/Gmaking-Team-Project/tree/master/backend/gmaking/src/main/resources/mapper/community) | |
+
+***
+
+### 🔍 주요 기여 역할 요약
+
+* **AI 서버:** `growth_ai_server` 폴더 내 **`img2img` 파이프라인 설계 및 AI Horde 비동기 통신** 구현.
+* **백엔드:** `gmaking/growth` 및 `gmaking/community` 폴더 내 **핵심 비즈니스 로직 및 DB Mapper 연동** 구현.
+* **프론트엔드:** `growth` 및 `community` 폴더 내 **데이터 연동 및 UI 컴포넌트** 구현.
+
 ## 1. 🤖 AI 성장형 캐릭터 시스템 (AI Growth Character System)
 
 유저 행동을 기반으로 캐릭터의 이미지를 **AI를 통해 시각적으로 진화**시키는 핵심 파이프라인을 설계 및 구현했습니다.

@@ -147,8 +147,8 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
 ***
 
 > **핵심 선택 근거**  
-> - `steps=28`, `denoising_strength=0.54`: **생성 시간 8.2초 달성**  
-> - `Anything Diffusion`: 2D/애니메 스타일에 안정적  
+> - `steps=28`, `denoising_strength=0.54`: **생성 시간 감소**  
+> - `Anything Diffusion`: 2D/애니메이션 스타일에 안정적  
 > - `cfg_scale=12`: 프롬프트 충실도 유지
 
 ***

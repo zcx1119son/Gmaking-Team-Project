@@ -114,6 +114,8 @@ graph LR
 
 ---
 
+***
+
 ## 4. 핵심 코드 & 로직 설계
 
 ### 4-1. FastAPI → AI Horde `img2img` 요청 (핵심 파라미터)

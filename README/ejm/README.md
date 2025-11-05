@@ -187,21 +187,21 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
 
 ```mermaid
 flowchart TD
-    A[User Growth Request] --> B{Clears Met?}
-    B -->|No| Z[Growth Failed]
-    B -->|Yes| C[Download Current Image]
-    C --> D[Base64 Encoding]
-    D --> E[Select Stage Prompt\n(STAGE1~4)]
-    E --> F[Submit to AI Horde img2img\nsteps=28, denoising=0.54]
-    F --> G{Job Done?}
+    A["User Growth Request"] --> B{"Clears Met?"}
+    B -->|No| Z["Growth Failed"]
+    B -->|Yes| C["Download Current Image"]
+    C --> D["Base64 Encoding"]
+    D --> E["Select Stage Prompt\n(STAGE1~4)"]
+    E --> F["Submit to AI Horde img2img\nsteps=28, denoising=0.54"]
+    F --> G{"Job Done?"}
     G -->|No| G
-    G -->|Yes| H[Result Image Base64]
-    H --> I[Random Stat Boost\n(+1~5)]
-    I --> J[DB Update 3 Tables]
-    J --> K[tb_character_stat: Final Stats]
-    J --> L[tb_character: Step + Image ID]
-    J --> M[tb_growth: Growth Log]
-    K & L & M --> N[Success Response + Before/After UI]
+    G -->|Yes| H["Result Image Base64"]
+    H --> I["Random Stat Boost\n(+1~5)"]
+    I --> J["DB Update 3 Tables"]
+    J --> K["tb_character_stat: Final Stats"]
+    J --> L["tb_character: Step + Image ID"]
+    J --> M["tb_growth: Growth Log"]
+    K & L & M --> N["Success Response + Before/After UI"]
 ```
 
 ***

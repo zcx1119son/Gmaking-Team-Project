@@ -114,8 +114,6 @@ graph LR
 
 ---
 
-***
-
 ## 4. 핵심 코드 & 로직 설계
 
 ### 4-1. FastAPI to AI Horde `img2img` 요청 (핵심 파라미터)
@@ -143,7 +141,7 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
         raise HTTPException(status_code=500, detail=f"Horde API submission failed: {response.text}")
     return response.json().get("id")
 
-***
+
 
 ## 🛑 트러블 슈팅 (Troubleshooting & Lessons Learned)
 

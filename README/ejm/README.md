@@ -191,12 +191,12 @@ flowchart TD
     B -->|No| Z["성장 불가"]
     B -->|Yes| C["현재 이미지 다운로드"]
     C --> D["Base64 인코딩"]
-    D --> E["단계별 프롬프트 선택\n(STAGE1~4)"]
-    E --> F["AI Horde img2img 제출\nsteps=28, denoising=0.54"]
-    F --> G{"Job 완료?"}
+    D --> E["단계별 프롬프트 선택<br/>(STAGE1~4)"]
+    E --> F["AI Horde img2img 제출<br/>steps=28, denoising=0.54"]
+    F --> G{"AI Horde 응답 도착?"}
     G -->|No| G
     G -->|Yes| H["결과 이미지 Base64"]
-    H --> I["스탯 랜덤 증가\n(+1~5)"]
+    H --> I["스탯 랜덤 증가<br/>(+1~5)"]
     I --> J["DB 업데이트 3단계"]
     J --> K["tb_character_stat: 최종 스탯"]
     J --> L["tb_character: 단계 + 이미지ID"]

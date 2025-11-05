@@ -174,6 +174,11 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
 
 ***
 
+> **일관성 보장 전략**  
+> - `same species`, `same face structure` → **강조 반복**  
+> - `negative_prompt`로 **종/얼굴 변형 차단**  
+> - `clean white background` → **전후 비교 UI 최적화**
+
 
 ## 🛑 트러블 슈팅 (Troubleshooting & Lessons Learned)
 

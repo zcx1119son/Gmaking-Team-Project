@@ -1,4 +1,3 @@
-// community/PostDetailPage.js
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -6,7 +5,7 @@ import Footer from '../../components/Footer';
 import { ThumbsUp, Eye, Tag, MessageSquare, Edit3, Trash2, Loader2, Send, Clock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-// 같은 폴더 내 모달 & 컴포넌트 import
+// 같은 폴덴더 내 모달 & 컴포넌트 import
 import ReportModal from './ReportModal';
 import ProfileSummaryModal from './ProfileSummaryModal';
 import ConfirmModal from './ConfirmModal';
@@ -18,7 +17,8 @@ const API_BASE_URL = 'http://localhost:8080/community';
 const PostDetailPage = () => {
     const { postId } = useParams();
     const navigate = useNavigate();
-    const { user, token } = useAuth();
+    // 💡 useAuth에서 user, token, isLoading을 가져옵니다.
+    const { user, token, isLoading } = useAuth(); 
 
     // 상태 관리
     const [post, setPost] = useState(null);
@@ -239,41 +239,27 @@ const PostDetailPage = () => {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                // 서버가 targetType을 요구하지 않으면 body에서 제거할 수 있음.
-                body: JSON.stringify({ reason }) 
+                body: JSON.stringify({ reason })
             });
 
             if (!response.ok) {
-                
-                // 🚩 1. HTTP 상태 코드 409 (Conflict)는 중복 신고로 간주하고 즉시 처리
                 if (response.status === 409) {
                     showMessage(`${type === 'POST' ? '게시글' : '댓글'} 신고가 **이미 접수되었습니다.**`, true);
-                    return; // 409 처리 후 바로 함수 종료
+                    return;
                 }
 
-                // 🚩 2. 그 외 다른 모든 오류 상태 코드 (400, 500 등) 처리
                 let errorDetail = `상태 코드: ${response.status}`;
                 try {
-                    // 오류 메시지를 포함하는 JSON 본문이 있다면 파싱
                     const errorData = await response.json();
-                    // 서버 메시지가 없다면 기본 상태 코드 사용
-                    errorDetail = errorData.message || errorDetail; 
-                } catch (e) {
-                    // JSON 파싱 에러 발생 시 원래 상태 코드를 유지하고 진행
-                }
-                
-                // 중복이 아닌 다른 종류의 오류는 throw하여 catch 블록에서 최종 처리
-                throw new Error(errorDetail); 
+                    errorDetail = errorData.message || errorDetail;
+                } catch (e) { }
+                throw new Error(errorDetail);
             }
 
-            // 성공 로직
             showMessage(`${type === 'POST' ? '게시글' : '댓글'} 신고 접수됨. 감사합니다.`, false);
-            
         } catch (error) {
-            // 중복 신고는 409에서 이미 처리되었으므로, 여기는 일반적인 네트워크/API 오류 처리
             console.error(`${type === 'POST' ? '게시글' : '댓글'} 신고 오류:`, error);
             showMessage(`신고 처리 중 오류가 발생했습니다: ${error.message}`, true);
-            
         } finally {
             setReportLoading(false);
             setShowReportModal(false);
@@ -303,21 +289,41 @@ const PostDetailPage = () => {
         hasIncrementedView.current = true;
     }, [postId, fetchPostDetail]);
 
-    // 로딩 중
-    if (loading) {
+    // ========================================
+    // 1. 인증 로딩 중 (useAuth의 isLoading)
+    // ========================================
+    if (isLoading) {
         return (
             <div className="min-h-screen flex flex-col bg-gray-900 text-white">
                 <Header />
                 <main className="flex-1 flex items-center justify-center">
                     <Loader2 className="animate-spin h-8 w-8 text-yellow-400" />
-                    <span className="ml-3 text-lg">로딩 중...</span>
+                    <span className="ml-3 text-lg">사용자 정보 로딩 중...</span>
                 </main>
                 <Footer />
             </div>
         );
     }
 
-    // 게시글 없음
+    // ========================================
+    // 2. 게시글 로딩 중 (fetchPostDetail의 loading)
+    // ========================================
+    if (loading) {
+        return (
+            <div className="min-h-screen flex flex-col bg-gray-900 text-white">
+                <Header />
+                <main className="flex-1 flex items-center justify-center">
+                    <Loader2 className="animate-spin h-8 w-8 text-yellow-400" />
+                    <span className="ml-3 text-lg">게시글 로딩 중...</span>
+                </main>
+                <Footer />
+            </div>
+        );
+    }
+
+    // ========================================
+    // 3. 게시글 없음
+    // ========================================
     if (!post) {
         return (
             <div className="min-h-screen flex flex-col bg-gray-900 text-white">
@@ -346,7 +352,6 @@ const PostDetailPage = () => {
                 <div className={`fixed top-20 right-5 z-50 flex items-center p-4 rounded-lg shadow-xl min-w-[300px] transition-all duration-300 ${
                     isErrorToast ? 'bg-red-600 text-white' : 'bg-yellow-500 text-gray-900'
                 }`}>
-                    {/* 라벨 제거 → 메시지만 표시 */}
                     <span className="font-semibold">{toastMessage}</span>
                     <button onClick={() => setToastMessage(null)} className="ml-auto text-lg opacity-75 hover:opacity-100">×</button>
                 </div>
@@ -398,23 +403,40 @@ const PostDetailPage = () => {
                     {/* 댓글 섹션 */}
                     <h2 className="text-xl font-bold mb-4 flex items-center">댓글 <span className="text-yellow-400 ml-2">({comments.length})</span></h2>
 
-                    {/* 댓글 작성 폼 */}
-                    <form onSubmit={handleSubmitComment} className="bg-gray-700 p-4 rounded-lg mb-6 border border-gray-600">
-                        <textarea
-                            className="w-full bg-gray-600 text-white p-3 rounded-lg border border-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"
-                            rows="3"
-                            placeholder={user ? `${user.userNickname}님, 댓글을 작성하세요.` : "로그인 후 작성 가능"}
-                            value={newCommentContent}
-                            onChange={(e) => setNewCommentContent(e.target.value)}
-                            disabled={!user || commentSubmitting}
-                        />
-                        <div className="flex justify-end mt-2">
-                            <button type="submit" disabled={!user || commentSubmitting || !newCommentContent.trim()} className="px-4 py-2 bg-yellow-500 text-gray-900 rounded-lg font-semibold hover:bg-yellow-400 transition disabled:bg-gray-500 flex items-center">
-                                {commentSubmitting && <Loader2 className="animate-spin h-5 w-5 mr-2" />}
-                                댓글 등록
-                            </button>
-                        </div>
-                    </form>
+                    {/* 🚀 댓글 작성 폼 로직: 닉네임 유효성 검사 강화 */}
+                    {user && typeof user.userNickname === 'string' && user.userNickname.trim().length > 0 ? (
+    // (A) 로그인 완료 및 닉네임 로드 완료 상태
+    <form onSubmit={handleSubmitComment} className="bg-gray-700 p-4 rounded-lg mb-6 border border-gray-600">
+        <textarea
+            className="w-full bg-gray-600 text-white p-3 rounded-lg border border-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"
+            rows="3"
+            placeholder={`${user.userNickname}님, 댓글을 작성하세요.`}
+            value={newCommentContent}
+            onChange={(e) => setNewCommentContent(e.target.value)}
+            disabled={commentSubmitting}
+        />
+        <div className="flex justify-end mt-2">
+            <button
+                type="submit"
+                disabled={commentSubmitting || !newCommentContent.trim()}
+                className="px-4 py-2 bg-yellow-500 text-gray-900 rounded-lg font-semibold hover:bg-yellow-400 transition disabled:bg-gray-500 flex items-center"
+            >
+                {commentSubmitting && <Loader2 className="animate-spin h-5 w-5 mr-2" />}
+                댓글 등록
+            </button>
+        </div>
+    </form>
+) : isLoading ? (
+    // (B) Auth 정보 로딩 중일 때
+    <div className="bg-gray-700 p-4 rounded-lg mb-6 border border-gray-600 text-center text-gray-400">
+        <Loader2 className="animate-spin h-5 w-5 inline mr-2" /> 사용자 인증 정보 로딩 중...
+    </div>
+) : ( 
+    // (C) 로그아웃 상태이거나 닉네임이 없거나 유효하지 않은 경우
+    <div className="bg-gray-700 p-4 rounded-lg mb-6 border border-gray-600 text-center text-gray-400">
+        댓글을 작성하려면 <button onClick={() => navigate('/login')} className="text-yellow-400 hover:underline">로그인</button>이 필요합니다.
+    </div>
+)}
 
                     {/* 댓글 리스트 */}
                     <div className="divide-y divide-gray-700 overflow-y-auto no-scrollbar">

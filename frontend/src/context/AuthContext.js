@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('incubatorCount');
         localStorage.removeItem('isAdFree');
         localStorage.removeItem('characterCount');
+        localStorage.removeItem('user_nickname');
 
         setToken(null);
         setUser(null);
@@ -77,6 +78,8 @@ export const AuthProvider = ({ children }) => {
         const storedCharacterCount = 
             Number.parseInt(localStorage.getItem('characterCount') ?? '0', 10) || 0;
 
+        const storedNickname = localStorage.getItem('user_nickname');
+
         if (!storedToken) {
             setIsLoading(false);
             return;
@@ -99,7 +102,7 @@ export const AuthProvider = ({ children }) => {
                 userEmail: userPayload.userEmail,
                 role: userPayload.role,
                 userName: userPayload.userName || userPayload.name,
-                userNickname: userPayload.userNickname || userPayload.nickname,
+                userNickname: storedNickname || userPayload.userNickname || userPayload.nickname,
                 hasCharacter:
                     userPayload.hasCharacter === true ||
                     userPayload.hasCharacter === 'true' ||
@@ -132,19 +135,22 @@ export const AuthProvider = ({ children }) => {
             setIncubatorCount(currentUser.incubatorCount);
             setIsAdFree(currentUser.isAdFree);
             setCharacterCount(currentUser.characterCount);
+            setIsLoading(false);
 
         } catch (error) {
             console.error('JWT 디코딩 실패 또는 사용자 정보 오류:', error);
             logout();
-        } finally {
             setIsLoading(false);
         }
-    }, [logout]);
+    }, [logout, token]);
 
     // 로그인
     const login = async (userId, userPassword) => {
         try {
             const response = await loginApi(userId, userPassword);
+
+            console.log("Login API 응답 전체:", response.data);
+            console.log("userInfo.userNickname:", response.data?.userInfo?.userNickname);
             if (response.data && response.data.success) {
                 const { token: receivedToken, userInfo } = response.data;
 
@@ -156,6 +162,10 @@ export const AuthProvider = ({ children }) => {
                     isAdFree: userInfo.isAdFree || false,
                     characterCount: userInfo.characterCount || 0,
                 };
+
+                if (userWithCharStatus.userNickname) {
+                    localStorage.setItem('user_nickname', userWithCharStatus.userNickname);
+                }
 
                 setToken(receivedToken);
                 setUser(userWithCharStatus);
@@ -253,6 +263,10 @@ export const AuthProvider = ({ children }) => {
             characterCount: charCount,
         };
 
+        if (userWithCharStatus.userNickname) {
+            localStorage.setItem('user_nickname', userWithCharStatus.userNickname);
+        }
+
         setToken(receivedToken);
         setUser(userWithCharStatus);
         setIsLoggedIn(true);
@@ -300,6 +314,7 @@ export const AuthProvider = ({ children }) => {
     }, [user]);
 
     const updateUserNickname = useCallback((newNickname) => {
+        localStorage.setItem('user_nickname', newNickname);
         setUser(prevUser => {
             if (!prevUser) return null;
             return {

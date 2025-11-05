@@ -8,11 +8,20 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from typing import Optional, Tuple, Dict, Any
 
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
 from dao.characterDAO import CharacterDAO
 from vo.growthVO import GrowthRequestVO, GrowthModel
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+DOTENV_PATH = PROJECT_ROOT / "backend" / "gmaking" / ".env"
+
+load_dotenv(dotenv_path=DOTENV_PATH)
+
 # === AI 통신 설정 (유지) ===
-HORDE_API_KEY = "z_RIG25C3-Bpx7-kZ7i-hQ".strip() # 실제 키 사용
+HORDE_API_KEY = os.environ.get("STABLE_HORDE_API_KEY", "YOUR_PLACEHOLDER_KEY").strip()
 HORDE_API_URL_SUBMIT = "https://stablehorde.net/api/v2/generate/async"
 HORDE_API_URL_FETCH = "https://stablehorde.net/api/v2/generate/status"
 HEADERS = {

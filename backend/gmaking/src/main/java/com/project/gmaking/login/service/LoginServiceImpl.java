@@ -49,6 +49,10 @@ public class LoginServiceImpl implements LoginService {
             // 로그인 성공 시 일일 퀘스트 자동 부여
             questService.initializeDailyQuests(user.getUserId());
 
+            log.info("로그인 성공 - userId: {}, userNickname: {}",
+                    user.getUserId(),
+                    user.getUserNickname() == null ? "NULL" : user.getUserNickname());
+
             // 로그인 성공, 보안을 위해 비밀번호 필드는 제거하고 반환
             user.setUserPassword(null);
 

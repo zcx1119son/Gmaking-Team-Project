@@ -118,7 +118,7 @@ graph LR
 
 ## 4. 핵심 코드 & 로직 설계
 
-### 4-1. FastAPI → AI Horde `img2img` 요청 (핵심 파라미터)
+### 4-1. FastAPI to AI Horde `img2img` 요청 (핵심 파라미터)
 
 ```python
 def _submit_job(self, prompt, negative_prompt, input_img_b64):
@@ -130,11 +130,11 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
         "source_processing": "img2img",
         "params": {
             "sampler_name": "k_euler_a",
-            "cfg_scale": 12,
-            "steps": 28,                    # 속도 & 퀄리티 최적화
+            "cfg_scale": 12,               # 프롬프트 충실도 유지
+            "steps": 28,                   # 속도 & 퀄리티 최적화
             "width": 1024,
             "height": 1024,
-            "denoising_strength": 0.54      # 기존 이미지 유지 + 변화 균형
+            "denoising_strength": 0.54     # 기존 이미지 유지 + 변화 균형
         },
         "nsfw": False
     }

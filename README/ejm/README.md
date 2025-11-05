@@ -219,7 +219,7 @@ flowchart TD
 
 | 문제 상황 | 해결 방안 및 기술적 판단 |
 | :--- | :--- |
-| **로컬 과부하:** 프로젝트 초기, $\text{GPU}$ 없이 $\text{CPU}$만으로 $\text{Stable Diffusion}$ 이미지를 생성 시도. 이미지 생성에 $\text{**과도한 시간(수분)**}$이 소요되고, 시스템 과부하로 인해 서비스 이용 불가. | **외부 $\text{API}$ 위임:** $\text{AI}$ 이미지 생성 로직을 로컬 $\text{CPU}$에서 **AI_Horde** 외부 $\text{API}$ 서버로 위임하여 **부하를 분산**하고, $\text{Frontend}$에 결과를 빠르게 반환하는 $\text{MSA}$ 구조를 확립함. |
+| **로컬 과부하:** 프로젝트 초기, GPU 없이 CPU만으로 Stable Diffusion 이미지를 생성 시도. 이미지 생성에 **단일 건당 5분 이상의 지연**이 발생하며 시스템 이용 불가. | **외부 $\text{API}$ 위임:** $\text{AI}$ 이미지 생성 로직을 로컬 $\text{CPU}$에서 **AI_Horde** 외부 $\text{API}$ 서버로 위임하여 **부하를 분산**하고, $\text{Frontend}$에 결과를 빠르게 반환하는 $\text{MSA}$ 구조를 확립함. |
 
 ***
 

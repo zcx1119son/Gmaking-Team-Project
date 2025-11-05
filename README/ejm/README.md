@@ -187,21 +187,21 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
 
 ```mermaid
 flowchart TD
-    A["User Growth Request"] --> B{"Clears Met?"}
-    B -->|No| Z["Growth Failed"]
-    B -->|Yes| C["Download Current Image"]
-    C --> D["Base64 Encoding"]
-    D --> E["Select Stage Prompt\n(STAGE1~4)"]
-    E --> F["Submit to AI Horde img2img\nsteps=28, denoising=0.54"]
-    F --> G{"Job Done?"}
+    A["유저 성장 요청"] --> B{"클리어 수 충족?"}
+    B -->|No| Z["성장 불가"]
+    B -->|Yes| C["현재 이미지 다운로드"]
+    C --> D["Base64 인코딩"]
+    D --> E["단계별 프롬프트 선택\n(STAGE1~4)"]
+    E --> F["AI Horde img2img 제출\nsteps=28, denoising=0.54"]
+    F --> G{"Job 완료?"}
     G -->|No| G
-    G -->|Yes| H["Result Image Base64"]
-    H --> I["Random Stat Boost\n(+1~5)"]
-    I --> J["DB Update 3 Tables"]
-    J --> K["tb_character_stat: Final Stats"]
-    J --> L["tb_character: Step + Image ID"]
-    J --> M["tb_growth: Growth Log"]
-    K & L & M --> N["Success Response + Before/After UI"]
+    G -->|Yes| H["결과 이미지 Base64"]
+    H --> I["스탯 랜덤 증가\n(+1~5)"]
+    I --> J["DB 업데이트 3단계"]
+    J --> K["tb_character_stat: 최종 스탯"]
+    J --> L["tb_character: 단계 + 이미지ID"]
+    J --> M["tb_growth: 증가분 기록"]
+    K & L & M --> N["성공 응답 + 전후 비교 UI"]
 ```
 
 ***

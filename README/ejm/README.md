@@ -4,6 +4,16 @@
 >
 > **담당:** **AI 성장형 캐릭터 시스템** 개발 (이미지 변형 AI 생성), **통합 커뮤니티 기능** 구현, **DB 테이블 정의서** 작성
 
+### 🎬 프로젝트 시연 영상 (Demo Video)
+
+**최종 구현된 시스템의 동작을 확인하세요.**
+
+[![시연 영상 미리보기](https://img.youtube.com/vi/YTS0xrpQASI/0.jpg)](https://www.youtube.com/watch?v=YTS0xrpQASI)
+
+* **URL:** [전체 영상 보기](https://www.youtube.com/watch?v=YTS0xrpQASI)
+
+---
+
 ***
 
 ## 💻 핵심 기여 소스 코드 (Core Contribution)

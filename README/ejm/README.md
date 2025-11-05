@@ -140,7 +140,9 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
     if response.status_code not in (200, 202):
         raise HTTPException(status_code=500, detail=f"Horde API submission failed: {response.text}")
     return response.json().get("id")
+```
 
+***
 
 
 ## 🛑 트러블 슈팅 (Troubleshooting & Lessons Learned)

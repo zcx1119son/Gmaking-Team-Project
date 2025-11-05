@@ -185,8 +185,7 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
 
 ### 4-3. 성장 로직 흐름도 (Mermaid)
 
-```
-flowchart TD
+```flowchart TD
     A[유저 성장 요청] --> B{클리어 수 충족?}
     B -->|No| Z[성장 불가]
     B -->|Yes| C[현재 이미지 다운로드]
@@ -202,6 +201,7 @@ flowchart TD
     J --> L[tb_character: 단계 + 이미지ID]
     J --> M[tb_growth: 증가분 기록]
     K & L & M --> N[성공 응답 + 전후 비교 UI]
+
 ```
 
 ***

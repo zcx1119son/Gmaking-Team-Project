@@ -196,7 +196,7 @@ flowchart TD
     F --> G{"AI Horde 응답 도착?"}
     G -->|No| G
     G -->|Yes| H["결과 이미지 Base64"]
-    H --> I["스탯 랜덤 증가<br/>(+1~5)"]
+    H --> I["스탯 랜덤 증가"]
     I --> J["DB 업데이트 3단계"]
     J --> K["tb_character_stat: 최종 스탯"]
     J --> L["tb_character: 단계 + 이미지ID"]

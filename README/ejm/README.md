@@ -82,6 +82,8 @@ graph LR
     B_1 --> A_1(Frontend: 성장 이미지 전 후 표시);
 ```    
 
+***
+
 ## ✅ 3.2. 🗄️ 데이터베이스 개요
 
 프로젝트의 데이터 모델링을 담당하며  
@@ -112,3 +114,126 @@ graph LR
 | **Infra / DevOps** | AWS EC2, S3, Docker, REST API | 서버 운영 환경, 이미지 저장, 컨테이너 환경 구축, 시스템 통신 |
 | **Tool** | PIL, Base64 | 이미지 처리 및 데이터 인코딩/디코딩 |
 
+---
+
+## 4. 핵심 코드 & 로직 설계
+
+### 4-1. FastAPI to AI Horde `img2img` 요청 (핵심 파라미터)
+
+```python
+def _submit_job(self, prompt, negative_prompt, input_img_b64):
+    payload = {
+        "prompt": prompt,
+        "negative_prompt": negative_prompt,
+        "models": ["Anything Diffusion"],  # 2D 스타일 최적화 모델
+        "source_image": input_img_b64,
+        "source_processing": "img2img",
+        "params": {
+            "sampler_name": "k_euler_a",
+            "cfg_scale": 12,               # 프롬프트 충실도 유지
+            "steps": 28,                   # 속도 & 퀄리티 최적화
+            "width": 1024,
+            "height": 1024,
+            "denoising_strength": 0.54     # 기존 이미지 유지 + 변화 균형
+        },
+        "nsfw": False
+    }
+    response = requests.post(HORDE_API_URL_SUBMIT, headers=HEADERS, json=payload, timeout=60)
+    if response.status_code not in (200, 202):
+        raise HTTPException(status_code=500, detail=f"Horde API submission failed: {response.text}")
+    return response.json().get("id")
+```
+
+***
+
+> **핵심 선택 근거**  
+> - `steps=28`, `denoising_strength=0.54`: **생성 시간 감소**  
+> - `Anything Diffusion`: 2D/애니메이션 스타일에 안정적  
+> - `cfg_scale=12`: 프롬프트 충실도 유지
+
+***
+
+### 4-2. 성장 단계별 프롬프트 템플릿
+
+```MODIFICATIONS = {
+    "EVO_KEY_STAGE1": {
+        "base_prompt": (
+            "A pixel-art fantasy RPG style character, keeping the same creature's **species**, "
+            "**color palette**, and overall **face structure** from the input image. "
+            "The character is now equipped with **basic, functional armor** and a **simple, functional weapon**. "
+            "The **pose** is that of a newly established warrior, confident and ready for adventure. "
+            "Centered composition, 1024x1024, with a **clean white background**."
+        ),
+        "negative_prompt": (
+            "different creature, new design, photorealistic, extra limbs, human-like form, blurry, "
+            "multiple characters, text, watermark, colored background, change in species or face, "
+            "oversized weapon, overly ornate"
+        )
+    }
+    # STAGE2, STAGE3, EVO_KEY_FINAL 동일 구조
+}
+```
+
+***
+
+> **일관성 보장 전략**  
+> - `same species`, `same face structure` → **강조 반복**  
+> - `negative_prompt`로 **종/얼굴 변형 차단**  
+> - `clean white background` → **전후 비교 UI 최적화**
+
+***
+
+### 4-3. 성장 로직 흐름도 (Mermaid)
+
+```mermaid
+flowchart TD
+    A["유저 성장 요청"] --> B{"클리어 수 충족?"}
+    B -->|No| Z["성장 불가"]
+    B -->|Yes| C["현재 이미지 다운로드"]
+    C --> D["Base64 인코딩"]
+    D --> E["단계별 프롬프트 선택<br/>(STAGE1~4)"]
+    E --> F["AI Horde img2img 제출<br/>steps=28, denoising=0.54"]
+    F --> G{"AI Horde 응답 도착?"}
+    G -->|No| G
+    G -->|Yes| H["결과 이미지 Base64"]
+    H --> I["스탯 랜덤 증가"]
+    I --> J["DB 업데이트 3단계"]
+    J --> K["tb_character_stat: 최종 스탯"]
+    J --> L["tb_character: 단계 + 이미지ID"]
+    J --> M["tb_growth: 증가분 기록"]
+    K & L & M --> N["성공 응답 + 전후 비교 UI"]
+```
+
+***
+
+> **핵심 설계 포인트**  
+> - **비동기 폴링** (`_fetch_result`)으로 AI 작업 대기  
+> - **트랜잭션 관리** (`db.commit()`)로 DB 일관성 보장  
+> - **3개 테이블 동기화** → 성장 이력 완벽 추적
+
+***
+
+## 🛑 트러블 슈팅 (Troubleshooting & Lessons Learned)
+
+### 1. ⚙️ 성능 저하 및 과부하 해결 (로컬 GPU 한계 극복)
+
+| 문제 상황 | 해결 방안 및 기술적 판단 |
+| :--- | :--- |
+| **로컬 과부하:** 프로젝트 초기, $\text{GPU}$ 없이 $\text{CPU}$만으로 $\text{Stable Diffusion}$ 이미지를 생성 시도. 이미지 생성에 **과도한 시간(수분)**이 소요되고, 시스템 과부하로 인해 서비스 이용 불가. | **외부 $\text{API}$ 위임:** $\text{AI}$ 이미지 생성 로직을 로컬 $\text{CPU}$에서 **AI_Horde** 외부 $\text{API}$ 서버로 위임하여 **부하를 분산**하고, $\text{Frontend}$에 결과를 빠르게 반환하는 $\text{MSA}$ 구조를 확립함. |
+
+### 2. ⚡️ AI 서버 통신 지연 및 응답 속도 최적화 
+
+**AI_Horde** $\text{API}$ 통신 과정에서 이미지 생성에 소요되는 시간(지연)을 단축하기 위해 **모델과 파라미터를 지속적으로 테스트 및 수정**했습니다.
+
+| 최적화 내용 | 상세 구현 (FastAPI Server) | 결과 |
+| :--- | :--- | :--- |
+| **모델 변경** | 기존 모델 대신 **`"Anything Diffusion"`** 모델을 사용하여 2D 스타일에 더 빠르고 안정적인 결과 도출. | 이미지 생성 응답 시간 **최적화** |
+| **파라미터 조정** | `steps`를 **28**로, `denoising_strength`를 **0.54**로 설정하여 퀄리티와 속도 사이의 **최적 지점**을 찾음. | **시각적 성장 유지**와 **생성 시간 단축** 두 가지 목표 달성 |
+
+### 3. ⚔️ 캐릭터 일관성 유지 문제 (무기 변경 실패)
+
+| 문제 상황 | 기술적 한계 및 우회 전략 |
+| :--- | :--- |
+| **특정 요소 인지 한계:** 캐릭터의 성장 단계에서 무기나 손에 들고 있는 장비를 바꾸기 위해 $\text{Mediapipe}$를 사용했으나, $\text{AI}$ 모델이 사람 손을 기준으로 학습되어 **캐릭터의 손 인식이 불가능**. | **성장 초점 변경:** 무기를 바꾸는 대신, **갑옷, 배경, 오라(Aura)** 등 모델이 명확히 인지할 수 있는 **전체적인 디테일**을 바꾸는 방식으로 성장 로직을 변경함. |
+
+***

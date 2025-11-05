@@ -140,7 +140,8 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
     if response.status_code not in (200, 202):
         raise HTTPException(status_code=500, detail=f"Horde API submission failed: {response.text}")
     return response.json().get("id")
---
+
+***
 
 ## 🛑 트러블 슈팅 (Troubleshooting & Lessons Learned)
 
@@ -165,4 +166,4 @@ def _submit_job(self, prompt, negative_prompt, input_img_b64):
 | :--- | :--- |
 | **특정 요소 인지 한계:** 캐릭터의 성장 단계에서 무기나 손에 들고 있는 장비를 바꾸기 위해 $\text{Mediapipe}$를 사용했으나, $\text{AI}$ 모델이 사람 손을 기준으로 학습되어 **캐릭터의 손 인식이 불가능**. | **성장 초점 변경:** 무기를 바꾸는 대신, **갑옷, 배경, 오라(Aura)** 등 모델이 명확히 인지할 수 있는 **전체적인 디테일**을 바꾸는 방식으로 성장 로직을 변경함. |
 
----
+***

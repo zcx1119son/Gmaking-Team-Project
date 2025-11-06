@@ -6,9 +6,7 @@
 
 ---
 
-### 🎬 프로젝트 시연 영상 (Demo Video)
-
-**최종 구현된 시스템의 동작을 확인하세요.**
+### 🎬 프로젝트 시연 영상 
 
 [![시연 영상 미리보기](https://img.youtube.com/vi/YTS0xrpQASI/0.jpg)](https://www.youtube.com/watch?v=YTS0xrpQASI)
 
